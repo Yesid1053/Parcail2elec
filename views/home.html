@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <title>Dishes</title>
+  </head>
+  <body>
+    <div class="container p-2">
+      <h1>Dishes</h1>
+      <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Calories</th>
+            <th scope="col">Value</th>
+            <th scope="col">Comments</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody id="body">
+          <script>
+            function loadDishes() {
+              return fetch("https://api-dishes.vercel.app/")
+                .then((resp) => resp.json())
+                .then((resp) => resp.data)
+                .catch((err) => console.log(err));
+            }
+
+            let dishesData; // Variable para almacenar los datos originales de los platos
+
+            loadDishes()
+              .then((data) => {
+                dishesData = data; // Almacenar los datos de los platos para el filtrado posterior
+                renderTable(dishesData); // Mostrar todos los platos inicialmente
+              })
+              .catch((err) => console.log(err));
+
+            function renderTable(dishes) {
+              document.getElementById("body").innerHTML = "";
+
+              dishes.forEach((dish) => {
+                const row = document.createElement("tr");
+
+                const colId = document.createElement("td"); // Columna para el ID
+                colId.append(document.createTextNode(`${dish._id}`));
+                row.append(colId);
+
+                const colName = document.createElement("td");
+                colName.append(document.createTextNode(`${dish.name}`));
+                row.append(colName);
+
+                const colCalories = document.createElement("td");
+                colCalories.append(document.createTextNode(`${dish.calories}`));
+                row.append(colCalories);
+
+                const colValue = document.createElement("td");
+                colValue.append(document.createTextNode(`${dish.value}`));
+                row.append(colValue);
+
+                const colComments = document.createElement("td");
+                colComments.append(document.createTextNode(`${dish.comments}`));
+                row.append(colComments);
+
+                document.getElementById("body").append(row);
+              });
+            }
+
+          </script>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+
+
